@@ -68,7 +68,7 @@ jobs:
       - run: # install and activate virtual environment with pip
           command: |
             python3 -m venv venv
-            . venv/bin/activate
+            source venv/bin/activate
             pip install --upgrade setuptools && pip install wheel
             pip install --upgrade pip
             pip install --upgrade pip-tools
@@ -132,7 +132,7 @@ jobs:
       - run: # install and activate virtual environment with pip
           command: |
             python3 -m venv venv
-            . venv/bin/activate
+            source venv/bin/activate
             pip install --upgrade setuptools && pip install wheel
             pip install --upgrade pip
             pip install --upgrade pip-tools
@@ -144,7 +144,7 @@ jobs:
       - run:
           name: combine coverage and generate XML report
           command: |
-            . venv/bin/activate
+            source venv/bin/activate
             coverage combine
             # at this point, if combine succeeded, we should see a combined .coverage file
             ls -lah .coverage
@@ -152,7 +152,7 @@ jobs:
             coverage xml
       - codecov/upload:
           # xtra_args: '-F'
-          upload_name: '${CIRCLE_BUILD_NUM}'
+          upload_name: "${CIRCLE_BUILD_NUM}"
 workflows:
   main:
     jobs:
