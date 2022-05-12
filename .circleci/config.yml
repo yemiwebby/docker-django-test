@@ -53,6 +53,8 @@ jobs:
       #     fingerprints:
       #       - "ab:cd:ef..."
       - checkout # special step to check out source code to the working directory
+      - python/install-packages:
+          pkg-manager: pip
       # using dockerize to wait for dependencies
       - run:
           name: install dockerize
