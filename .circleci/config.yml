@@ -70,7 +70,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install --upgrade setuptools && pip install wheel
-            pip install --upgrade pip
+            pip install --upgrade pip==22.0.4
             pip install --upgrade pip-tools
             pip-sync requirements/base.txt requirements/local.txt
       - save_cache: # special step to save dependency cache
@@ -83,7 +83,6 @@ jobs:
             . venv/bin/activate
             python3 manage.py collectstatic --noinput
       - run: # run tests
-          # note the --parallel flag using 8 which is based on xlarge resource class
           name: run tests using manage.py
           command: |
             # get test files while ignoring __init__ files
@@ -92,10 +91,7 @@ jobs:
             TESTFILES=$(circleci tests split --split-by=timings circleci_test_files.txt | tr "/" "." | sed 's/\.py//g')
             . venv/bin/activate
             # coverage's --parallel-mode will generate a .coverage-{random} file
-            # usage: https://docs.djangoproject.com/en/4.0/topics/testing/advanced/#integration-with-coverage-py
-            # we add an `--omit` here to get rid of Coverage's warnings
-            # See related: https://github.com/nedbat/coveragepy/issues/905
-            # check .coveragerc where we have source and omit
+            # usage: https://docs.djangoproject.com/en/3.2/topics/testing/advanced/#integration-with-coverage-py
             # add `--verbosity=3` between $TESTFILES --keepdb if need to debug
             coverage run --parallel-mode manage.py test --failfast $TESTFILES --keepdb
           # name: run tests using pytest
@@ -134,7 +130,8 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install --upgrade setuptools && pip install wheel
-            pip install --upgrade pip
+            # because of https://github.com/jazzband/pip-tools/issues/1617#issuecomment-1124289479
+            pip install --upgrade pip==22.0.4
             pip install --upgrade pip-tools
             pip-sync requirements/base.txt requirements/local.txt
       - save_cache: # special step to save dependency cache
